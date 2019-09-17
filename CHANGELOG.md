@@ -7,32 +7,41 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [0.4.0][] - 2018-04-04
-
-- Various changes
-
-## [0.3.0][] - 2017-08-30
-
+## [1.1.0] - 2019-05-09
+### Added
+- Support for securitySchemes and security #15
+- Support for servers #18
+- Support for schemas included by path with all $refs merged into components #7
 ### Changed
+- Convert project from Yarn to npm #5
+- Switch to eslint #8
+- Update Readme #19
 
-- Plugin now generates OpenAPI documentation with a version of `3.0.0` instead of `3.0.0-RC2`.
-- Operation now supports `deprecated` and `tags` properties.
-- Parameters now support the `content` property.
-- Updated various build dependencies.
-- OpenAPI definition will now be smaller in most cases, choosing to omit optional properties instead of using empty defaults.
-
+## [1.0.4] - 2019-05-07
 ### Fixed
+- Fix issue with last release where the package was published from the root directory, not the build directory
 
-- Handle when `models` is not iterable.
-- Handle when `models` have no `schema`.
-- Always lowercase the HTTP method to conform to OpenAPI spec.
+## [1.0.3] - 2019-05-07
+### Fixed
+- Fix for requestBody and parameters #6
 
-## [v0.2.1] - 2017-07-07
+## [1.0.2] - 2019-05-03
+### Changed
+- test tag publish
 
-Last release prior to CHANGELOG being added.
+## [1.0.1] - 2019-05-02
+### Changed
+- test tag publish
+
+## [1.0.0] - 2019-05-02
+### Changed
+- inital release after forking from temando/serverless-openapi-documentation
 
 
-[Unreleased]: https://github.com/temando/serverless-openapi-documentation/compare/v0.4.0...HEAD
-[0.4.0]: https://github.com/temando/serverless-openapi-documentation/compare/v0.4.0...v0.4.0
-[0.4.0]: https://github.com/temando/serverless-openapi-documentation/compare/v0.3.0...v0.4.0
-[0.3.0]: https://github.com/temando/serverless-openapi-documentation/tree/v0.3.0
+[Unreleased]: https://github.com/conqa/serverless-openapi-documentation/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/conqa/serverless-openapi-documentation/compare/v1.0.4...v1.1.0
+[1.0.4]: https://github.com/conqa/serverless-openapi-documentation/compare/v1.0.3...v1.0.4
+[1.0.3]: https://github.com/conqa/serverless-openapi-documentation/compare/v1.0.2...v1.0.3
+[1.0.2]: https://github.com/conqa/serverless-openapi-documentation/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/conqa/serverless-openapi-documentation/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/conqa/serverless-openapi-documentation/tree/v1.0.0
