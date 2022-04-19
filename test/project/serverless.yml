@@ -5,14 +5,16 @@ provider:
   runtime: nodejs6.10
 
 plugins:
-  - serverless-openapi-documentation
+  localPath: ../../
+  modules:
+    - build
 
 functions:
   createUser:
     handler: handler.create
     events:
       - http:
-          path: create
+          path: create/{username}
           method: post
           authorizer:
             name: customAuth
@@ -55,37 +57,4 @@ functions:
                   application/json: ErrorResponse
 
 custom:
-  documentation:
-    title: "a title"
-    version: "1.2"
-    description: "a description"
-    servers:
-      - url: "https://example.com"
-        description: "Dev server"
-    security:
-      - name: auth
-        authorizerName: customAuth
-        type: http
-        scheme: bearer
-    models:
-      - name: ErrorResponse
-        description: This is an error
-        contentType: application/json
-        schema: ${file(models/ErrorResponse.json)}
-
-      - name: PutDocumentResponse
-        description: PUT Document response model (external reference example)
-        contentType: application/json
-        schema: ${file(models/PutDocumentResponse.json)}
-
-      - name: PutDocumentRequest
-        description: PUT Document request model (inline example)
-        contentType: application/json
-        schema:
-          $schema: http://json-schema.org/draft-04/schema#
-          properties:
-            SomeObject:
-              type: object
-              properties:
-                SomeAttribute:
-                  type: string
+  documentation: ${file(serverless.doc.yml):documentation}
