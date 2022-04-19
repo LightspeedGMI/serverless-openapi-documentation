@@ -16,6 +16,7 @@ interface Service {
 }
 interface Variables {
     service: Service;
+    populateService(): Promise<any>;
 }
 interface FullServerless extends Serverless {
     variables: Variables;

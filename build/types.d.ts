@@ -28,7 +28,6 @@ export interface DefinitionType {
 }
 export interface ServerlessFunctionConfig {
     _functionName: string;
-    handler: string;
     description?: string;
     environment?: object;
     events?: Array<any>;

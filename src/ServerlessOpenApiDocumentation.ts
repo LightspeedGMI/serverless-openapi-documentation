@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk = require("chalk");
 import * as fs from "fs";
 import * as YAML from "js-yaml";
 import _ = require("lodash");
@@ -28,6 +28,8 @@ interface Service {
 
 interface Variables {
   service: Service;
+
+  populateService(): Promise<any>;
 }
 
 interface FullServerless extends Serverless {
@@ -65,25 +67,38 @@ export class ServerlessOpenApiDocumentation {
             options: {
               output: {
                 usage: "Output file location [default: openapi.yml|json]",
-                shortcut: "o"
+                shortcut: "o",
+                type: "string",
               },
               format: {
                 usage: "OpenAPI file format (yml|json) [default: yml]",
-                shortcut: "f"
+                shortcut: "f",
+                type: "string",
               },
               indent: {
                 usage: "File indentation in spaces [default: 2]",
-                shortcut: "i"
-              }
-            }
-          }
-        }
-      }
+                shortcut: "i",
+                type: "string",
+              },
+            },
+          },
+        },
+      },
     };
+
+    this.serverless.configSchemaHandler.defineFunctionEventProperties(
+      "aws",
+      "http",
+      {
+        properties: {
+          documentation: { type: "object" },
+        },
+      }
+    );
 
     // Declare the hooks our plugin is interested in
     this.hooks = {
-      "openapi:generate:serverless": this.generate.bind(this)
+      "openapi:generate:serverless": this.generate.bind(this),
     };
   }
 
@@ -107,7 +122,7 @@ export class ServerlessOpenApiDocumentation {
     // Map function configurations
     const funcConfigs = this.serverless.service
       .getAllFunctions()
-      .map(functionName => {
+      .map((functionName) => {
         const func = this.serverless.service.getFunction(functionName);
         return _.merge({ _functionName: functionName }, func);
       });
@@ -170,7 +185,7 @@ export class ServerlessOpenApiDocumentation {
         break;
       case "yaml":
       default:
-        output = YAML.safeDump(definition, { indent: config.indent });
+        output = YAML.dump(definition, { indent: config.indent });
         break;
     }
 
@@ -189,7 +204,7 @@ export class ServerlessOpenApiDocumentation {
     const config: DefinitionType = {
       format: Format.yaml,
       file: "openapi.yml",
-      indent: 2
+      indent: 2,
     };
 
     config.indent = this.serverless.processedInput.options.indent || 2;
@@ -198,7 +213,7 @@ export class ServerlessOpenApiDocumentation {
 
     if ([Format.yaml, Format.json].indexOf(config.format) < 0) {
       throw new Error(
-        'Invalid Output Format Specified - must be one of "yaml" or "json"'
+        "Invalid Output Format Specified - must be one of 'yaml' or 'json'"
       );
     }
 

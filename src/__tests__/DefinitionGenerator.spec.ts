@@ -21,7 +21,7 @@ describe("OpenAPI Documentation Generator", () => {
     sls = new Serverless();
 
     sls.config.update({
-      servicePath
+      servicePath,
     });
 
     const config = await sls.yamlParser.parse(serverlessYamlPath);
@@ -54,7 +54,7 @@ describe("OpenAPI Documentation Generator", () => {
     // implementation copied from ServerlessOpenApiDocumentation.ts
     await docGen.parse();
 
-    const funcConfigs = sls.service.getAllFunctions().map(functionName => {
+    const funcConfigs = sls.service.getAllFunctions().map((functionName) => {
       const func = sls.service.getFunction(functionName);
       return _.merge({ _functionName: functionName }, func);
     });
@@ -72,8 +72,8 @@ describe("OpenAPI Documentation Generator", () => {
         required: true,
         schema: {
           pattern: "^[-a-z0-9_]+$",
-          type: "string"
-        }
+          type: "string",
+        },
       },
       {
         allowEmptyValue: false,
@@ -83,8 +83,8 @@ describe("OpenAPI Documentation Generator", () => {
         required: false,
         schema: {
           enum: ["premium", "standard"],
-          type: "string"
-        }
+          type: "string",
+        },
       },
       {
         description: "A Session ID variable",
@@ -92,9 +92,9 @@ describe("OpenAPI Documentation Generator", () => {
         name: "SessionId",
         required: false,
         schema: {
-          type: "string"
-        }
-      }
+          type: "string",
+        },
+      },
     ];
 
     expect(actual).toEqual(expected);

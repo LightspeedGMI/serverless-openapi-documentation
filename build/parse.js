@@ -1,13 +1,15 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.parseModels = void 0;
 const $RefParser = require("json-schema-ref-parser");
 const _ = require("lodash");
 const path = require("path");
@@ -18,7 +20,7 @@ function updateReferences(schema) {
     }
     const cloned = _.cloneDeep(schema);
     if (cloned.$ref) {
-        return Object.assign({}, cloned, { $ref: cloned.$ref.replace("#/definitions", "#/components/schemas") });
+        return Object.assign(Object.assign({}, cloned), { $ref: cloned.$ref.replace("#/definitions", "#/components/schemas") });
     }
     for (const key of Object.getOwnPropertyNames(cloned)) {
         const value = cloned[key];
@@ -42,7 +44,7 @@ function parseModels(models, root) {
                 ? yield $RefParser.bundle(path.resolve(root, model.schema))
                 : model.schema);
             _.assign(schemas, updateReferences(schema.definitions), {
-                [model.name]: updateReferences(utils_1.cleanSchema(schema))
+                [model.name]: updateReferences((0, utils_1.cleanSchema)(schema)),
             });
         }
         return schemas;

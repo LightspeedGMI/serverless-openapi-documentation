@@ -1,9 +1,10 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
@@ -25,11 +26,11 @@ class ServerlessInterface extends Serverless {
 describe("OpenAPI Documentation Generator", () => {
     let sls;
     const servicePath = path.join(__dirname, "../../test/project");
-    beforeEach(() => __awaiter(this, void 0, void 0, function* () {
+    beforeEach(() => __awaiter(void 0, void 0, void 0, function* () {
         const serverlessYamlPath = path.join(servicePath, "./serverless.yml");
         sls = new Serverless();
         sls.config.update({
-            servicePath
+            servicePath,
         });
         const config = yield sls.yamlParser.parse(serverlessYamlPath);
         sls.pluginManager.cliOptions = { stage: "dev" };
@@ -39,15 +40,15 @@ describe("OpenAPI Documentation Generator", () => {
             throw new Error('Cannot find "documentation" in custom section of "serverless.yml"');
         }
     }));
-    it("Generates OpenAPI document", () => __awaiter(this, void 0, void 0, function* () {
+    it("Generates OpenAPI document", () => __awaiter(void 0, void 0, void 0, function* () {
         const docGen = new DefinitionGenerator_1.DefinitionGenerator(sls.service.custom.documentation, servicePath);
         expect(docGen).not.toBeNull();
     }));
-    it("adds paths to OpenAPI output from function configuration", () => __awaiter(this, void 0, void 0, function* () {
+    it("adds paths to OpenAPI output from function configuration", () => __awaiter(void 0, void 0, void 0, function* () {
         const docGen = new DefinitionGenerator_1.DefinitionGenerator(sls.service.custom.documentation, servicePath);
         // implementation copied from ServerlessOpenApiDocumentation.ts
         yield docGen.parse();
-        const funcConfigs = sls.service.getAllFunctions().map(functionName => {
+        const funcConfigs = sls.service.getAllFunctions().map((functionName) => {
             const func = sls.service.getFunction(functionName);
             return _.merge({ _functionName: functionName }, func);
         });
@@ -62,8 +63,8 @@ describe("OpenAPI Documentation Generator", () => {
                 required: true,
                 schema: {
                     pattern: "^[-a-z0-9_]+$",
-                    type: "string"
-                }
+                    type: "string",
+                },
             },
             {
                 allowEmptyValue: false,
@@ -73,8 +74,8 @@ describe("OpenAPI Documentation Generator", () => {
                 required: false,
                 schema: {
                     enum: ["premium", "standard"],
-                    type: "string"
-                }
+                    type: "string",
+                },
             },
             {
                 description: "A Session ID variable",
@@ -82,9 +83,9 @@ describe("OpenAPI Documentation Generator", () => {
                 name: "SessionId",
                 required: false,
                 schema: {
-                    type: "string"
-                }
-            }
+                    type: "string",
+                },
+            },
         ];
         expect(actual).toEqual(expected);
     }));

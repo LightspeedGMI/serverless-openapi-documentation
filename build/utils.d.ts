@@ -1,1 +1,1 @@
-export declare const cleanSchema: (schema: any) => any;
+export declare const cleanSchema: (schema: any) => Pick<any, string | number | symbol>;

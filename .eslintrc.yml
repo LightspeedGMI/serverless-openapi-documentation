@@ -3,17 +3,13 @@ env:
 parser: "@typescript-eslint/parser"
 extends:
   - "plugin:@typescript-eslint/recommended"
-  - "prettier/@typescript-eslint"
   - "plugin:prettier/recommended"
 parserOptions:
   ecmaVersion: 2018
   sourceType: module
   project: tsconfig.json
 rules:
-  "@typescript-eslint/array-type": [error, generic]
-  "@typescript-eslint/interface-name-prefix": [error, never]
-  "@typescript-eslint/promise-function-async": warning
-  "@typescript-eslint/explicit-function-return-type": false
+  "prettier/explicit-function-return-type": 0
 overrides:
   - files: ["src/**/*.test.ts"]
     env:
